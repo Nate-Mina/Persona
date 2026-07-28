@@ -72,6 +72,7 @@ exit /b 0
 
 REM -------------------------------------------------------------------
 :need_venv
+<<<<<<< Updated upstream
 if exist "%DEST%\venv\Scripts\pip.exe" (
   echo [sabrina-setup] venv present
   exit /b 0
@@ -84,6 +85,27 @@ echo [sabrina-setup] installing requirements...
 "%DEST%\venv\Scripts\pip.exe" install -r "%DEST%\requirements.txt"
 echo [sabrina-setup] pinning gruut (no numpy<2)...
 "%DEST%\venv\Scripts\pip.exe" install gruut==2.2.3 --no-deps
+=======
+if exist "%DEST%\python\deps_installed.marker" (
+  if exist "%DEST%\python\python.exe" (
+    if exist "%DEST%\python\Lib\site-packages\TTS" (
+      echo [sabrina-setup] deps present
+      exit /b 0
+    )
+  )
+)
+echo [sabrina-setup] installing torch (CPU)...
+"%DEST%\python\Scripts\pip.exe" install torch==2.4.1+cpu torchaudio==2.4.1+cpu --extra-index-url https://download.pytorch.org/whl/cpu
+echo [sabrina-setup] installing TTS 0.22.0 (lets it pull its own pinned deps)...
+"%DEST%\python\Scripts\pip.exe" install TTS==0.22.0
+echo [sabrina-setup] forcing numpy-2-compatible stack on top (resolves TTS pandas<2 conflict)...
+"%DEST%\python\Scripts\pip.exe" install "numpy==2.0.2" "scipy==1.14.1" "numba==0.60.0" "llvmlite==0.43.0" "scikit-learn==1.6.1" "spacy==3.8.4" "blis==1.0.1" "pandas==2.2.3" "matplotlib==3.9.2" "transformers==4.41.0" "tokenizers==0.19.1" "huggingface-hub==0.23.4"
+echo [sabrina-setup] installing remaining deps (stt, server, search)...
+"%DEST%\python\Scripts\pip.exe" install faster-whisper==1.2.1 "fastapi>=0.110" "uvicorn[standard]>=0.29" python-multipart>=0.0.9 requests>=2.31 ddgs>=9.0 python-dotenv>=1.2 soundfile==0.14.0 msgpack==1.2.1 resampy==0.4.3 joblib==1.5.3 pooch==1.9.0 pillow==12.3.0 pyparsing==3.3.2 babel==2.18.0 num2words==0.5.14 inflect==7.5.0 anyascii==0.3.3 regex==2026.7.19 sympy
+echo [sabrina-setup] pinning gruut (must NOT pull numpy<2)...
+"%DEST%\python\Scripts\pip.exe" install gruut==2.2.3 --no-deps
+echo done > "%DEST%\python\deps_installed.marker"
+>>>>>>> Stashed changes
 exit /b 0
 
 REM -------------------------------------------------------------------
