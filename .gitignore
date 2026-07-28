@@ -14,3 +14,19 @@ data/state.json
 # OS
 Thumbs.db
 Desktop.ini
+
+# Installer build scratch (keep the real artifacts below)
+installer/nul
+installer/C:SabrinaExtractTesttest4.log
+installer/*.log
+installer/pytest.bat
+installer/findlock.ps1
+installer/bootstrap.py
+installer/7z-extra.7z
+installer/7zS.sfx
+installer/7zsfx.nupkg
+
+# Installer real artifacts to version (uncomment if you want them in git)
+# installer/Sabrina-Setup.exe
+# installer/SabrinaBundle.zip
+# installer/7za.exe
