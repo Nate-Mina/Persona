@@ -28,7 +28,7 @@ huggingface-hub==0.23.4
 # --- 4) TTS (voice cloning, XTTS v2) ---
 TTS==0.22.0
 # gruut must NOT pull numpy<2:  pip install "gruut==2.2.3" --no-deps
-gruut==2.2.3
+gruut==2.4.0
 
 # --- 5) TTS's undeclared-but-required extras ---
 soundfile==0.14.0
