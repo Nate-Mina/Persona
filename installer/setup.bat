@@ -72,18 +72,17 @@ exit /b 0
 
 REM -------------------------------------------------------------------
 :need_venv
-if exist "%DEST%\venv\Scripts\pip.exe" (
-  echo [sabrina-setup] venv present
+if exist "%DEST%\python\deps_installed.marker" (
+  echo [sabrina-setup] deps present
   exit /b 0
 )
-echo [sabrina-setup] creating venv...
-"%DEST%\python\python.exe" -m venv "%DEST%\venv"
-echo [sabrina-setup] installing torch (CPU)...
-"%DEST%\venv\Scripts\pip.exe" install torch==2.4.1+cpu torchaudio==2.4.1+cpu --extra-index-url https://download.pytorch.org/whl/cpu
+echo [sabrina-setup] installing torch (CPU) into embedded Python...
+"%DEST%\python\Scripts\pip.exe" install torch==2.4.1+cpu torchaudio==2.4.1+cpu --extra-index-url https://download.pytorch.org/whl/cpu
 echo [sabrina-setup] installing requirements...
-"%DEST%\venv\Scripts\pip.exe" install -r "%DEST%\requirements.txt"
+"%DEST%\python\Scripts\pip.exe" install -r "%DEST%\requirements.txt"
 echo [sabrina-setup] pinning gruut (no numpy<2)...
-"%DEST%\venv\Scripts\pip.exe" install gruut==2.2.3 --no-deps
+"%DEST%\python\Scripts\pip.exe" install gruut==2.2.3 --no-deps
+echo done > "%DEST%\python\deps_installed.marker"
 exit /b 0
 
 REM -------------------------------------------------------------------
@@ -93,7 +92,7 @@ if exist "%DEST%\data\xtts_v2\model.pth" (
   exit /b 0
 )
 echo [sabrina-setup] downloading XTTS v2 model (~2 GB, slow)...
-"%DEST%\venv\Scripts\python.exe" -c "from huggingface_hub import snapshot_download; snapshot_download('coqui/XTTS-v2', local_dir=r'%DEST%\data\xtts_v2')"
+"%DEST%\python\python.exe" -c "from huggingface_hub import snapshot_download; snapshot_download('coqui/XTTS-v2', local_dir=r'%DEST%\data\xtts_v2')"
 exit /b 0
 
 REM -------------------------------------------------------------------

@@ -18,7 +18,7 @@ import webbrowser
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 INSTALL_DIR = os.path.abspath(os.path.join(HERE, ".."))
-VENV_PY = os.path.join(INSTALL_DIR, "venv", "Scripts", "python.exe")
+VENV_PY = os.path.join(INSTALL_DIR, "python", "python.exe")
 STATE_FILE = os.path.join(INSTALL_DIR, "install_state.json")
 OLLAMA_EXE = os.path.join(INSTALL_DIR, "ollama", "ollama.exe")
 RUN_PY = os.path.join(INSTALL_DIR, "run.py")
