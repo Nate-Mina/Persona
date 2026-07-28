@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Large model + runtime data (keep data/voices .wav you want to version separately)
+data/xtts_v2/
+data/*.wav
+data/state.json
+
+# Env
+.env
+
+# OS
+Thumbs.db
+Desktop.ini

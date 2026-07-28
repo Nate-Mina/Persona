@@ -1,0 +1,53 @@
+[sabrina-setup] Installing Sabrina to C:\Users\NateMina\AppData\Local\Sabrina
+[sabrina-setup] Installing Sabrina to C:\Users\NateMina\AppData\Local\Sabrina
+[sabrina-setup] Copying files...
+[sabrina-setup] downloading embedded Python...
+Invoke-WebRequest : Invalid URI: The hostname could not be parsed.
+At line:1 char:1
++ Invoke-WebRequest -Uri '' -OutFile 'C:\Users\NateMina\AppData\Local\S ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Invoke-WebRequest], UriFormatException
+    + FullyQualifiedErrorId : System.UriFormatException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+ 
+[sabrina-setup] extracting Python...
+Expand-Archive : The path 'C:\Users\NateMina\AppData\Local\Sabrina\python-embed.zip' either does not exist or is not a 
+valid file system path.
+At line:1 char:1
++ Expand-Archive -Force 'C:\Users\NateMina\AppData\Local\Sabrina\python ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (C:\Users\NateMi...ython-embed.zip:String) [Expand-Archive], InvalidOpe 
+   rationException
+    + FullyQualifiedErrorId : ArchiveCmdletPathNotFound,Expand-Archive
+ 
+[sabrina-setup] enabling import site...
+Get-Content : Cannot find path 'C:\Users\NateMina\AppData\Local\Sabrina\python\python311._pth' because it does not 
+exist.
+At line:1 char:72
++ ... pData\Local\Sabrina\python\python311._pth'; $t=Get-Content $p; if(-no ...
++                                                    ~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Users\NateMi...\python311._pth:String) [Get-Content], ItemNotFoundEx 
+   ception
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetContentCommand
+ 
+[sabrina-setup] installing pip...
+Invoke-WebRequest : Invalid URI: The hostname could not be parsed.
+At line:1 char:1
++ Invoke-WebRequest -Uri '' -OutFile 'C:\Users\NateMina\AppData\Local\S ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Invoke-WebRequest], UriFormatException
+    + FullyQualifiedErrorId : System.UriFormatException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+ 
+'"C:\Users\NateMina\AppData\Local\Sabrina\python\python.exe"' is not recognized as an internal or external command,
+operable program or batch file.
+[sabrina-setup] creating venv...
+'"C:\Users\NateMina\AppData\Local\Sabrina\python\python.exe"' is not recognized as an internal or external command,
+operable program or batch file.
+[sabrina-setup] installing torch (CPU)...
+The system cannot find the path specified.
+[sabrina-setup] installing requirements...
+The system cannot find the path specified.
+The system cannot find the file specified.
+The system cannot find the path specified.
+[sabrina-setup] downloading XTTS v2 model (~2 GB, slow)...
+The system cannot find the path specified.
+[sabrina-setup] downloading Ollama...

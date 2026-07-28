@@ -1,0 +1,57 @@
+# Sabrina — The Guarded Survivor (local voice persona game)
+#
+# INSTALL ORDER MATTERS on Windows. The TTS 0.22.0 stack has broken dependency
+# metadata + a numpy-2 vs numpy-1 C-extension conflict. The coherent set below
+# was verified working end-to-end. Install torch from the CPU index first, then
+# the rest. `gruut` MUST be installed with --no-deps so it does not drag
+# numpy<2 (which breaks torch 2.4.1's numpy bridge).
+
+# --- 1) torch CPU wheel (from the pytorch CPU index) ---
+# pip install "torch==2.4.1+cpu" "torchaudio==2.4.1+cpu" --extra-index-url https://download.pytorch.org/whl/cpu
+
+# --- 2) scientific stack pinned to a numpy-2-compatible set ---
+numpy==2.0.2
+scipy==1.14.1
+numba==0.60.0
+llvmlite==0.43.0
+scikit-learn==1.6.1
+spacy==3.8.4
+blis==1.0.1
+pandas==2.2.3
+matplotlib==3.9.2
+
+# --- 3) transformers / huggingface (match TTS 0.22.0 expectations) ---
+transformers==4.41.0
+tokenizers==0.19.1
+huggingface-hub==0.23.4
+
+# --- 4) TTS (voice cloning, XTTS v2) ---
+TTS==0.22.0
+# gruut must NOT pull numpy<2:  pip install "gruut==2.2.3" --no-deps
+gruut==2.2.3
+
+# --- 5) TTS's undeclared-but-required extras ---
+soundfile==0.14.0
+msgpack==1.2.1
+resampy==0.4.3
+joblib==1.5.3
+pooch==1.9.0
+pillow==12.3.0
+pyparsing==3.3.2
+babel==2.18.0
+num2words==0.5.14
+inflect==7.5.0
+anyascii==0.3.3
+regex==2026.7.19
+sympy
+
+# --- 6) speech-to-text ---
+faster-whisper==1.2.1
+
+# --- 7) web server + search + env ---
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+requests>=2.31
+ddgs>=9.0
+python-dotenv>=1.2

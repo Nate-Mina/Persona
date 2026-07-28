@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sabrina — The Guarded Survivor</title>
+<style>
+  :root{
+    --bg:#0b0d10; --panel:#14181d; --ink:#e6e9ee; --muted:#8b95a1;
+    --accent:#c2453f; --accent2:#6f7bff; --line:#222831; --ok:#3fb98a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
+    background:radial-gradient(1200px 600px at 50% -10%,#1a1f26,var(--bg));color:var(--ink);height:100vh}
+  .wrap{max-width:760px;margin:0 auto;height:100%;display:flex;flex-direction:column;padding:14px}
+  header{display:flex;align-items:center;gap:12px;padding:6px 4px 12px;border-bottom:1px solid var(--line)}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+  h1{font-size:17px;margin:0;letter-spacing:.5px}
+  .sub{color:var(--muted);font-size:12px;margin-left:auto;display:flex;gap:14px;align-items:center}
+  #trust{font-variant-numeric:tabular-nums}
+  .bar{height:6px;width:120px;background:#222; border-radius:4px;overflow:hidden}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--ok));width:20%}
+  #log{flex:1;overflow-y:auto;padding:16px 6px;display:flex;flex-direction:column;gap:14px}
+  .row{display:flex;gap:10px;align-items:flex-end}
+  .row.nate{flex-direction:row-reverse}
+  .bub{max-width:78%;padding:11px 14px;border-radius:14px;line-height:1.45;font-size:14.5px;white-space:pre-wrap}
+  .nate .bub{background:#1d2733;border-bottom-right-radius:4px}
+  .sab .bub{background:#1a1416;border:1px solid #2a1d20;border-bottom-left-radius:4px}
+  .who{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+  .em{flex-direction:column;align-items:flex-start}
+  .row.nate.em{flex-direction:column;align-items:flex-end}
+  .meta{font-size:11px;color:var(--muted);display:flex;gap:8px;align-items:center;margin-top:4px}
+  .tag{padding:1px 7px;border-radius:20px;border:1px solid var(--line);color:var(--muted)}
+  .flash{font-size:12.5px;color:#e7b6b3;border-left:2px solid var(--accent);padding:6px 10px;margin-top:6px;
+    background:#1c1314;border-radius:6px;font-style:italic}
+  .hook{font-size:12px;color:#aab4ff;border-left:2px solid var(--accent2);padding:5px 10px;margin-top:6px;border-radius:6px;background:#14161f}
+  .controls{display:flex;gap:10px;align-items:center;padding:12px 4px;border-top:1px solid var(--line)}
+  button{background:#1b2026;color:var(--ink);border:1px solid var(--line);padding:10px 14px;border-radius:10px;
+    cursor:pointer;font-size:13px;transition:.15s}
+  button:hover{border-color:#3a4450}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .rec{width:14px;height:14px;border-radius:50%;background:#555;display:inline-block;vertical-align:middle;margin-right:6px}
+  .rec.live{background:var(--accent);animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  #text{font-size:15px}
+  textarea{flex:1;resize:none;height:46px;background:#0e1216;color:var(--ink);border:1px solid var(--line);
+    border-radius:10px;padding:10px 12px;font-family:inherit;font-size:14px}
+  .rms{display:flex;gap:2px;align-items:flex-end;height:30px;width:90px}
+  .rms > i{width:5px;background:var(--accent2);height:4px;border-radius:2px;transition:.05s}
+  .tabbar{display:flex;gap:6px;padding:0 4px 8px}
+  .tab{padding:6px 12px;font-size:12px;border-radius:8px;background:#11151a;border:1px solid var(--line);cursor:pointer;color:var(--muted)}
+  .tab.on{color:var(--ink);border-color:#3a4450}
+  .pane{display:none}
+  .pane.on{display:block}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:10px}
+  .hint{color:var(--muted);font-size:12px;line-height:1.6}
+  select{background:#0e1216;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
+  .pill{font-size:11px;color:var(--muted)}
+  audio{width:100%;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="dot"></span>
+    <h1>SABRINA · The Guarded Survivor</h1>
+    <div class="sub">
+      <span id="trust">trust 20%</span>
+      <span class="bar"><i id="trustbar"></i></span>
+    </div>
+  </header>
+
+  <div class="tabbar">
+    <div class="tab on" data-pane="chat">Voice Chat</div>
+    <div class="tab" data-pane="clone">Clone a Voice</div>
+    <div class="tab" data-pane="about">About Sabrina</div>
+  </div>
+
+  <!-- CHAT PANE -->
+  <div class="pane on" id="pane-chat">
+    <div id="log">
+      <div class="row sab em">
+        <div>
+          <div class="who">Sabrina</div>
+          <div class="bub">…you showed up. Again. What your motive man? I'm waiting for the other shoe to drop.</div>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <span class="rms" id="rms"></span>
+      <button id="talk" class="primary"><span class="rec" id="recDot"></span>Push to Talk</button>
+      <span class="pill" id="mode">release to send</span>
+      <button id="interrupt" title="Stop Sabrina talking">⏹</button>
+    </div>
+    <div class="controls" style="border-top:none;padding-top:0">
+      <textarea id="text" placeholder="…or type to Sabrina"></textarea>
+      <button id="send">Send</button>
+    </div>
+  </div>
+
+  <!-- CLONE PANE -->
+  <div class="pane" id="pane-clone">
+    <div class="card">
+      <h3 style="margin-top:0">Clone a Voice (XTTS v2 · local)</h3>
+      <p class="hint">Provide 10–30s of clean speech (one speaker, no music). You can
+        <b>record</b> it here or <b>upload</b> a wav/mp3/webm file. Sabrina will then speak in that voice.</p>
+      <div class="controls" style="border:none;padding:8px 0">
+        <button id="recClone"><span class="rec" id="cloneDot"></span>Record Sample</button>
+        <button id="stopClone" disabled>Stop</button>
+        <span class="pill">or</span>
+        <input id="cloneFile" type="file" accept="audio/*,.wav,.mp3,.webm,.ogg,.m4a" style="color:var(--muted);max-width:220px">
+        <button id="uploadClone">Upload</button>
+        <span class="pill" id="cloneStatus">idle</span>
+      </div>
+      <audio id="clonePlay" controls></audio>
+      <div class="controls" style="border:none;padding:8px 0">
+        <label class="pill">Name: <input id="cloneName" value="sabrina" style="background:#0e1216;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px"></label>
+        <button id="saveClone" class="primary" disabled>Save Voice</button>
+      </div>
+      <hr style="border-color:var(--line)">
+      <div class="controls" style="border:none;padding:8px 0">
+        <label class="pill">Active voice:</label>
+        <select id="voiceSel"></select>
+        <button id="testVoice">Test</button>
+      </div>
+      <div class="hint" id="voiceList"></div>
+    </div>
+  </div>
+
+  <!-- ABOUT PANE -->
+  <div class="pane" id="pane-about">
+    <div class="card hint">
+      <h3 style="color:var(--ink);margin-top:0">Who is Sabrina?</h3>
+      A guarded survivor. Pessimistic bias. Trust is a trap, kindness a prelude to betrayal.
+      She's a true-crime & psychology obsessive, a heavy addict, and your reluctant partner
+      in a planned obscure-cases YouTube channel.<br><br>
+      <b>Talk to her about:</b> obscure serial killers, DSM-5, medical facts, the channel → her guard cracks.<br>
+      <b>Don't:</b> call her beautiful, push feelings, mention Tommy / the motel / her dad → she shuts down hard.<br><br>
+      <b>Trust meter</b> is fragile. Intellectual paths raise it; emotional prying drops it.<br><br>
+      Everything runs locally: Ollama (your 6700XT) for her brain, faster-whisper for your voice,
+      Coqui XTTS v2 for hers (clonable). No data leaves your machine.
+      <div style="margin-top:10px"><button id="resetBtn">Reset her memory</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const log = document.getElementById('log');
+const rmsEl = document.getElementById('rms');
+const talkBtn = document.getElementById('talk');
+const recDot = document.getElementById('recDot');
+const modePill = document.getElementById('mode');
+const interruptBtn = document.getElementById('interrupt');
+const textEl = document.getElementById('text');
+const sendBtn = document.getElementById('send');
+const trustEl = document.getElementById('trust');
+const trustBar = document.getElementById('trustbar');
+
+let mediaRecorder, chunks=[], audioCtx, analyser, raf, currentAudio, micStream, vadRunning=false, speaking=false;
+
+// ---------- tabs ----------
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.pane').forEach(x=>x.classList.remove('on'));
+  t.classList.add('on');
+  document.getElementById('pane-'+t.dataset.pane).classList.add('on');
+});
+
+function addBubble(role, text, emotion, flash, hook){
+  const row=document.createElement('div');
+  row.className='row '+role+(role==='nate'?' em':(emotion?' em':''));
+  const box=document.createElement('div');
+  box.innerHTML=`<div class="who">${role==='nate'?'Nate':'Sabrina'}</div>`+
+    `<div class="bub"></div>`;
+  box.querySelector('.bub').textContent=text;
+  if(emotion){
+    const m=document.createElement('div'); m.className='meta';
+    m.innerHTML=`<span class="tag">${emotion}</span>`;
+    box.appendChild(m);
+  }
+  if(flash){
+    const f=document.createElement('div'); f.className='flash';
+    f.textContent='⚡ flashback: '+flash; box.appendChild(f);
+  }
+  if(hook){
+    const h=document.createElement('div'); h.className='hook';
+    h.textContent='↳ '+hook; box.appendChild(h);
+  }
+  row.appendChild(box); log.appendChild(row);
+  log.scrollTop=log.scrollHeight;
+}
+
+async function updateState(){
+  try{
+    const r=await fetch('/state'); const s=await r.json();
+    trustEl.textContent='trust '+s.trust+'%';
+    trustBar.style.width=Math.max(4,s.trust)+'%';
+  }catch(e){}
+}
+
+// ---------- VAD / meter ----------
+function drawMeter(level){
+  // build bars once
+  if(rmsEl.childElementCount===0){
+    for(let i=0;i<14;i++){const b=document.createElement('i');rmsEl.appendChild(b);}
+  }
+  const bars=rmsEl.children;
+  for(let i=0;i<bars.length;i++){
+    const h=Math.max(3, level*100*(0.5+Math.random()*0.8));
+    bars[i].style.height=Math.min(30,h)+'px';
+  }
+}
+async function startMeter(stream){
+  audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  const src=audioCtx.createMediaStreamSource(stream);
+  analyser=audioCtx.createAnalyser(); analyser.fftSize=256;
+  src.connect(analyser);
+  const data=new Uint8Array(analyser.frequencyBinCount);
+  function loop(){
+    analyser.getByteTimeDomainData(data);
+    let sum=0; for(const v of data){const x=(v-128)/128; sum+=x*x;}
+    const rms=Math.sqrt(sum/data.length);
+    drawMeter(rms);
+    raf=requestAnimationFrame(loop);
+  }
+  loop();
+}
+function stopMeter(){ if(raf)cancelAnimationFrame(raf); if(audioCtx){audioCtx.close();audioCtx=null;} }
+
+// ---------- record + send ----------
+async function startRecording(){
+  micStream=await navigator.mediaDevices.getUserMedia({audio:true});
+  startMeter(micStream);
+  chunks=[];
+  mediaRecorder=new MediaRecorder(micStream);
+  mediaRecorder.ondataavailable=e=>chunks.push(e.data);
+  mediaRecorder.start();
+  recDot.classList.add('live');
+}
+function stopRecording(){
+  return new Promise(res=>{
+    mediaRecorder.onstop=()=>{
+      recDot.classList.remove('live'); stopMeter();
+      const blob=new Blob(chunks,{type:mediaRecorder.mimeType||'audio/webm'});
+      res(blob);
+    };
+    mediaRecorder.stop();
+  });
+}
+
+talkBtn.onmousedown=async ()=>{ if(speaking)return; try{await startRecording();}catch(e){alert('Mic blocked: '+e.message);} };
+talkBtn.onmouseup=async ()=>{ if(!mediaRecorder||mediaRecorder.state!=='recording')return; const blob=await stopRecording(); sendAudio(blob); };
+talkBtn.ontouchstart=(e)=>{e.preventDefault(); talkBtn.onmousedown();};
+talkBtn.ontouchend=(e)=>{e.preventDefault(); talkBtn.onmouseup();};
+
+async function sendAudio(blob){
+  if(!blob || blob.size<1000){ return; }
+  addBubble('nate', '🎤 …', null);
+  const fd=new FormData(); fd.append('file', blob, 'nate.webm');
+  try{
+    const r=await fetch('/stt',{method:'POST',body:fd});
+    const j=await r.json();
+    const text=(j.text||'').trim();
+    if(!text){ log.lastChild.querySelector('.bub').textContent='… (couldn’t hear that)'; return; }
+    log.lastChild.querySelector('.bub').textContent=text;
+    await ask(text);
+  }catch(e){ log.lastChild.querySelector('.bub').textContent='[stt error]'; }
+}
+
+sendBtn.onclick=async ()=>{
+  const t=textEl.value.trim(); if(!t)return; textEl.value='';
+  addBubble('nate', t, null); await ask(t);
+};
+textEl.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendBtn.click();} });
+
+async function ask(text){
+  if(speaking) stopSpeaking();
+  interruptBtn.disabled=false;
+  const r=await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({text})});
+  const j=await r.json();
+  if(j.offline){
+    addBubble('sab', j.reply, 'fear', '', '');
+    const hint=document.createElement('div');
+    hint.className='meta'; hint.innerHTML='<span class="tag" style="border-color:#c2453f;color:#c2453f">OFFLINE — Ollama not running. Start it: ollama serve</span>';
+    log.lastChild.querySelector('div:last-child').appendChild(hint);
+    log.scrollTop=log.scrollHeight;
+    return;
+  }
+  addBubble('sab', j.reply, j.emotion, j.flashback, j.hook);
+  updateState();
+  await speak(j.reply, j.voice);
+}
+
+// ---------- TTS playback with barge-in ----------
+async function speak(text, voice){
+  const body=JSON.stringify({text, voice: voice||activeVoice});
+  const r=await fetch('/tts',{method:'POST',headers:{'Content-Type':'application/json'},body});
+  const blob=await r.blob();
+  const url=URL.createObjectURL(blob);
+  const audio=new Audio(url); currentAudio=audio; speaking=true;
+  audio.onended=()=>{speaking=false; interruptBtn.disabled=true;};
+  audio.play();
+  // start VAD so Nate can interrupt mid-sentence (barge-in)
+  startBargeIn();
+}
+function stopSpeaking(){ if(currentAudio){currentAudio.pause();currentAudio=null;} speaking=false; interruptBtn.disabled=true; stopBargeIn(); }
+interruptBtn.onclick=stopSpeaking;
+
+// Barge-in: if mic sees sustained loud speech while Sabrina talks, stop her.
+let bargeStream, bargeRAF, bargeLevel=0;
+async function startBargeIn(){
+  try{
+    bargeStream=await navigator.mediaDevices.getUserMedia({audio:true});
+    const ac=new (window.AudioContext||window.webkitAudioContext)();
+    const an=ac.createAnalyser(); an.fftSize=256;
+    ac.createMediaStreamSource(bargeStream).connect(an);
+    const data=new Uint8Array(an.frequencyBinCount); let loudFrames=0;
+    function loop(){
+      an.getByteTimeDomainData(data);
+      let s=0; for(const v of data){const x=(v-128)/128; s+=x*x;}
+      bargeLevel=Math.sqrt(s/data.length);
+      if(speaking && bargeLevel>0.06){ loudFrames++; } else { loudFrames=Math.max(0,loudFrames-1); }
+      if(loudFrames>6){ stopSpeaking(); ac.close(); bargeStream.getTracks().forEach(t=>t.stop()); return; }
+      bargeRAF=requestAnimationFrame(loop);
+    }
+    loop();
+  }catch(e){}
+}
+function stopBargeIn(){ if(bargeRAF)cancelAnimationFrame(bargeRAF); if(bargeStream)bargeStream.getTracks().forEach(t=>t.stop()); }
+
+// ---------- voice clone ----------
+const recClone=document.getElementById('recClone');
+const stopClone=document.getElementById('stopClone');
+const cloneDot=document.getElementById('cloneDot');
+const cloneStatus=document.getElementById('cloneStatus');
+const clonePlay=document.getElementById('clonePlay');
+const saveClone=document.getElementById('saveClone');
+const cloneName=document.getElementById('cloneName');
+let cloneChunks=[], cloneRec, cloneBlob;
+recClone.onclick=async ()=>{
+  const s=await navigator.mediaDevices.getUserMedia({audio:true});
+  cloneChunks=[]; cloneRec=new MediaRecorder(s);
+  cloneRec.ondataavailable=e=>cloneChunks.push(e.data);
+  cloneRec.onstop=()=>{
+    cloneBlob=new Blob(cloneChunks,{type:cloneRec.mimeType||'audio/webm'});
+    clonePlay.src=URL.createObjectURL(cloneBlob);
+    saveClone.disabled=false; cloneStatus.textContent='recorded '+(cloneBlob.size/1e6).toFixed(1)+'MB';
+  };
+  cloneRec.start(); recClone.disabled=true; stopClone.disabled=false; cloneDot.classList.add('live');
+  cloneStatus.textContent='recording…';
+};
+stopClone.onclick=()=>{ if(cloneRec&&cloneRec.state==='recording')cloneRec.stop();
+  recClone.disabled=false; stopClone.disabled=true; cloneDot.classList.remove('live'); };
+saveClone.onclick=async ()=>{
+  if(!cloneBlob)return; const fd=new FormData();
+  fd.append('file', cloneBlob, 'sample.webm'); fd.append('name', cloneName.value.trim()||'sabrina');
+  cloneStatus.textContent='saving…';
+  const r=await fetch('/clone',{method:'POST',body:fd}); const j=await r.json();
+  cloneStatus.textContent='saved '+j.voice;
+  await refreshVoices();
+};
+document.getElementById('uploadClone').onclick=async ()=>{
+  const f=document.getElementById('cloneFile').files[0];
+  if(!f){ cloneStatus.textContent='choose a file first'; return; }
+  const fd=new FormData();
+  fd.append('file', f, f.name); fd.append('name', cloneName.value.trim()||'sabrina');
+  cloneStatus.textContent='uploading…';
+  try{
+    const r=await fetch('/clone',{method:'POST',body:fd}); const j=await r.json();
+    if(!j.ok){ cloneStatus.textContent='upload failed'; return; }
+    cloneStatus.textContent='saved '+j.voice;
+    // preview the uploaded clip
+    clonePlay.src=URL.createObjectURL(f);
+    await refreshVoices();
+  }catch(e){ cloneStatus.textContent='upload error'; }
+};
+
+let activeVoice='';
+async function refreshVoices(){
+  const r=await fetch('/voices'); const j=await r.json();
+  const sel=document.getElementById('voiceSel'); sel.innerHTML='';
+  j.voices.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;sel.appendChild(o);});
+  activeVoice=sel.value||'';
+  document.getElementById('voiceList').textContent='Saved voices: '+(j.voices.join(', ')||'none');
+}
+sel_onchange=()=>{};
+document.getElementById('voiceSel').onchange=e=>{activeVoice=e.target.value;};
+document.getElementById('testVoice').onclick=async ()=>{
+  const r=await fetch('/tts',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({text:"If you cloned me right, you're hearing my voice. Creepy, right?", voice:activeVoice})});
+  const blob=await r.blob(); new Audio(URL.createObjectURL(blob)).play();
+};
+document.getElementById('resetBtn').onclick=async ()=>{
+  await fetch('/reset',{method:'POST'}); await updateState();
+  alert('Sabrina\'s memory reset. Trust back to 20.');
+};
+
+refreshVoices(); updateState();
+</script>
+</body>
+</html>
