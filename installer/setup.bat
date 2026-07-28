@@ -53,11 +53,13 @@ REM ===================== subroutines =====================
 echo [sabrina-setup] Copying files...
 if not exist "%DEST%" mkdir "%DEST%"
 robocopy "%SRC%app"        "%DEST%\app"        /E /NFL /NDL /NJH /NJS >nul
-robocopy "%SRC%installer"  "%DEST%\installer"  /E /NFL /NDL /NJH /NJS >nul
 copy /Y "%SRC%run.py"          "%DEST%\run.py"          >nul
 copy /Y "%SRC%requirements.txt" "%DEST%\requirements.txt" >nul
 copy /Y "%SRC%README.md"       "%DEST%\README.md"       >nul
 copy /Y "%SRC%.env.example"    "%DEST%\.env.example"    >nul
+if not exist "%DEST%\installer" mkdir "%DEST%\installer"
+copy /Y "%SRC%launcher.py"     "%DEST%\installer\launcher.py"     >nul
+copy /Y "%SRC%launcher.vbs"    "%DEST%\installer\launcher.vbs"    >nul
 exit /b 0
 
 
