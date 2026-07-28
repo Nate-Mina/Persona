@@ -51,7 +51,21 @@ def state():
             "last_emotion": s["last_emotion"], "hooks": s["hooks"]}
 
 
-@app.post("/reset")
+@app.get("/persona")
+def get_persona():
+    from . import sabrina
+    return {"text": sabrina.load_persona()}
+
+
+@app.post("/persona")
+async def set_persona(payload: dict):
+    text = (payload or {}).get("text", "").strip()
+    from . import sabrina
+    sabrina.save_persona(text)
+    return {"ok": True, "chars": len(text)}
+
+
+@app.get("/reset")
 def reset():
     engine.reset()
     return {"ok": True}

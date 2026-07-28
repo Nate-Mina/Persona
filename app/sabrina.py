@@ -98,6 +98,25 @@ def save_state(s: dict):
         pass
 
 
+def load_persona() -> str:
+    """Return the user-defined persona text (empty string if none set)."""
+    from .config import PERSONA_FILE
+    try:
+        if PERSONA_FILE.exists():
+            return PERSONA_FILE.read_text(encoding="utf-8").strip()
+    except Exception:
+        pass
+    return ""
+
+
+def save_persona(text: str):
+    from .config import PERSONA_FILE
+    try:
+        PERSONA_FILE.write_text(text.strip(), encoding="utf-8")
+    except Exception:
+        pass
+
+
 def detect_trigger(text: str) -> dict | None:
     t = text.lower()
     for key, pats in TRIGGER_PATTERNS.items():

@@ -5,6 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 VOICES_DIR = DATA_DIR / "voices"
 STATE_FILE = DATA_DIR / "state.json"
+PERSONA_FILE = DATA_DIR / "persona.txt"  # user-defined persona override
 
 # Load .env if present (python-dotenv optional)
 try:

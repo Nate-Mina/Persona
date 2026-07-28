@@ -175,6 +175,22 @@ def respond(user_text: str) -> dict:
 
     # Build system prompt, injecting state + continuity + trigger + facts.
     sys = sabrina.SYSTEM_PROMPT
+
+    # User-defined persona override (set via the About tab). When present,
+    # Sabrina adopts the custom persona but keeps the same JSON output shape
+    # and interaction mechanics.
+    persona = sabrina.load_persona()
+    if persona:
+        sys = (
+            "You are roleplaying as a CUSTOM PERSONA defined by the user — NOT your "
+            "default Sabrina character. Fully adopt the persona below: its identity, "
+            "voice, history, and mannerisms. Keep the same interaction mechanics: stay "
+            "in character 100%, never break character or mention you are an AI, and "
+            "always respond with the same JSON object shape (reply/emotion/flashback/hook). "
+            "If the persona implies a relationship with the user (Nate), honor it.\n\n"
+            "=== CUSTOM PERSONA ===\n" + persona + "\n=== END PERSONA ===\n\n"
+            + sabrina.SYSTEM_PROMPT
+        )
     sys += f"\n\n[CURRENT STATE] trust={state['trust']}/100, turns={state['turns']}, " \
            f"last_emotion={state['last_emotion']}, recent_topic={state['last_topic']}."
     sys += "\nStay consistent with this trust level: " + (
